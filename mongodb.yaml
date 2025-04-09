@@ -3,17 +3,39 @@ version: "3.8"
 services:
   mongo:
     image: mongo
+    container_name: mongo-compose
     ports:
       - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
 
   mongo-express:
     image: mongo-express
+    container_name: mongo-express-compose
     ports:
       - 8081:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
       ME_CONFIG_MONGODB_URL: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/"
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi-app-compose
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  mongo_data:
