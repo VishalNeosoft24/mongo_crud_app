@@ -48,7 +48,7 @@ Ideal for testing MongoDB connectivity, API development, or containerized backen
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/your-username/fastapi-mongo-crud.git
+git clone https://github.com/VishalNeosoft24/mongo_crud_app.git
 cd fastapi-mongo-crud
 ```
 
